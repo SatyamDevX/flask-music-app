@@ -6,3 +6,4 @@ instance/
 .venv/
 .env
 .DS_Store
+*.db
