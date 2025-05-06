@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Song{% endblock %}
+
+{% block content %}
+<h1>Upload your song here</h1>
+
+<form action="/song/upload" method="POST" enctype="multipart/form-data" id="create-form"  >
+   <div>
+     <label>Song Title</label><br>
+     <input class="form-control me-2" type="text" name="title" required />
+   </div><br>
+   <div>
+     <label>Artist</label><br>
+     <input class="form-control me-2" type="text" name="artist" required />
+   </div><br>
+   <!-- <div>
+     <label>Release Date</label><br>
+     <input class="form-control me-2" type="date" name="realse_date" />
+   </div><br>
+   <div>
+     <label>Lyrics</label><br>
+     <input class="form-control me-2" style="text-overflow: ellipsis;overflow:scroll;" type="text" name="lyrics" required />
+   </div><br>
+
+   <div>
+     <label>Genere</label><br>
+     <input class="form-control me-2" style="text-overflow: ellipsis;overflow:scroll;" type="text" name="genere" required />
+   </div><br> -->
+
+   <dl>
+      <p>
+         <input type="file" name="file" class="form-control" autocomplete="off" style="width: 400px;" required>
+      </p>
+   </dl>
+   <p>
+   <button type="submit" value="Submit" class="btn btn-info" >Upload</button> 
+   </p>
+ </form>
+ {% endblock %}
