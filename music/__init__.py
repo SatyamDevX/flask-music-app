@@ -17,6 +17,7 @@ def create_app():
     app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', secrets.token_hex(16))
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_SEND_REGISTER_EMAIL'] = False  # Disable email for now
+    app.config['UPLOAD_FOLDER'] = os.path.join('music/static', 'uploads')
 
     # Ensure instance folder exists
     try:
@@ -54,6 +55,10 @@ def create_app():
     # Test route
     @app.route("/")
     def hello():
-        return render_template('home.html')
+        return render_template('base.html')
+    
+    #registring song blueprint
+    from . import song
+    app.register_blueprint(song.song_bp)
 
     return app
