@@ -8,7 +8,7 @@ import secrets
 from .models import db, User, Role
 
 def create_app():
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__,instance_relative_config=True)
 
     # Configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(app.instance_path, 'music.db'))
@@ -17,7 +17,9 @@ def create_app():
     app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', secrets.token_hex(16))
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_SEND_REGISTER_EMAIL'] = False  # Disable email for now
-    app.config['UPLOAD_FOLDER'] = os.path.join('music/static', 'uploads')
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
+    print("UPLOAD TO:", app.config['UPLOAD_FOLDER'])
+
 
     # Ensure instance folder exists
     try:
