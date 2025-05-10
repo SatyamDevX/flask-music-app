@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, current_app
+from flask import Blueprint, render_template, request, current_app, redirect
 
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -51,3 +51,14 @@ def song_upload():
    return render_template('song_upload.html')
 
 
+@song_bp.route('/<int:song_id>/delete', methods=["GET","POST"])
+def delete_song(song_id):
+
+   song=Song.query.get(song_id)
+   #file_path=upload_folderpath+filename
+   file_path=os.path.join(current_app.config['UPLOAD_FOLDER'], song.file_path)
+   os.remove(file_path)
+
+   db.session.delete(song)
+   db.session.commit()
+   return redirect('/song/all')
