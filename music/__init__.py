@@ -63,4 +63,7 @@ def create_app():
     from . import song
     app.register_blueprint(song.song_bp)
 
+    from . import user
+    app.register_blueprint(user.user_bp)
+
     return app

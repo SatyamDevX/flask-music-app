@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+
+
+<table style="margin-left: 10px;margin-top: 10px; border-collapse: collapse;">
+    <tbody> 
+    <th>
+        <td style="text-align: center;" ><strong>ALL songs</strong></td>
+    </th> 
+  {% for song in songs %}
+
+    <tr>
+      <td>
+      <strong>{{ song.title }}</strong> by {{ song.artist }}
+     </td>
+     <td>
+      <audio controls>
+        <source src="{{ url_for('static', filename='uploads/' ~ song.file_path) }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      </td>
+      <td>
+        <a href="{{url_for('song.delete_song', song_id = song.id)}}" class="btn btn-primary" style="margin-right: 4px;width: fit-content;">Delete</a>
+      </td>
+    </tr>
+  {% endfor %}
+    </tbody>
+</table>  
+
+
+
+{% endblock %}
