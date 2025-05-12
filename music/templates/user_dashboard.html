@@ -23,7 +23,10 @@
       </audio>
       </td>
       <td>
-        <a href="{{url_for('song.delete_song', song_id = song.id)}}" class="btn btn-primary" style="margin-right: 4px;width: fit-content;">Delete</a>
+        <a href="{{url_for('song.play_song', song_id = song.id)}}" class="btn btn-primary" style="margin-left: 4px;">play song</a>
+      </td>
+      <td>
+        <a href="{{url_for('song.delete_song', song_id = song.id)}}" class="btn btn-danger" style="margin-right: 4px;width: fit-content;">Delete</a>
       </td>
     </tr>
   {% endfor %}
