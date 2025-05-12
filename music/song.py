@@ -62,3 +62,9 @@ def delete_song(song_id):
    db.session.delete(song)
    db.session.commit()
    return redirect('/song/all')
+
+@song_bp.route('/<int:song_id>/play')
+def play_song(song_id):
+   song=Song.query.get(song_id)
+   print(song)
+   return render_template("song_play.html",s=song)
