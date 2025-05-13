@@ -1,0 +1,31 @@
+.lyrics-box {
+  height: 300px;
+  width: 300px; /* You can adjust this if needed */
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  padding: 15px;
+  background-color: #181818;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  scroll-behavior: smooth;
+  word-wrap: break-word;         /* Wrap long words */
+  white-space: pre-wrap;         /* Preserve line breaks and wrap */
+  box-sizing: border-box;        /* Prevent overflow by including padding */
+}
+
+.lyrics-line {
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  white-space: normal; /* Allow wrapping of long lines */
+}
+
+.lyrics-line.highlight {
+  opacity: 1;
+  color: #1db954;
+  font-weight: bold;
+}

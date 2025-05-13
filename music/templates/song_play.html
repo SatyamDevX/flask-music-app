@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lyrics.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/audio.css') }}">
 {% endblock %}
 
@@ -9,7 +10,7 @@
 
 <div class="container audio-page">
 
-   <h1 style="margin-bottom: 20px;">Music Player</h1>
+   <h1 style="margin-bottom: 20px;margin-top: 60px;">Music Player</h1>
    <div class="card">
       <div class="card-header">
       <h3>Play Song </h3>
@@ -19,10 +20,13 @@
          <div class="card-body" style="height: fit-content; width: fit-content;">
             <h5 class="card-title" style="margin-right: 10px; border: 5px; text-align: center;"><strong>{{s.title}}</strong></h5>
             <h6 class="card-subtitle mb-2 text-muted">Artist--{{s.artist}}</h6>
-            <audio controls loop  autoplay style="height: 50px; width: 300px; display: block;" >
+            <audio id="audio" controls loop  autoplay style="height: 50px; width: 300px; display: block;" >
                <source src="{{ url_for('static', filename='uploads/' ~ s.file_path) }}" type="audio/mpeg">
                Your browser does not support the audio tag.
             </audio>
+            <div class="lyrics-box">
+               <pre id="lyricsDisplay" ></pre>
+            </div>
             <!-- <p class="card-text" style="border-color: black;width: 300px;">{{s.lyrics}} </p> -->
          </div>
       </div>
@@ -30,5 +34,59 @@
    </div>
 </div>
 
+{% endblock %}
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const audio = document.getElementById('audio');
+  const lyricsDisplay = document.getElementById('lyricsDisplay');
+  let lyrics = [];
+  let currentLine = -1;
+
+  fetch("{{ url_for('static', filename='lyrics/'  ~ s.file_path.replace('.mp3', '.lrc')) }}")
+    .then(response => response.text())
+    .then(text => {
+      lyrics = text.trim().split('\n').map((line, idx) => {
+        const match = line.match(/\[(\d+):(\d+\.\d+)\](.*)/);
+        if (match) {
+          const minutes = parseInt(match[1]);
+          const seconds = parseFloat(match[2]);
+          const time = minutes * 60 + seconds;
+          const text = match[3].trim();
+          return { time, text };
+        }
+        return null;
+      }).filter(Boolean);
+
+      lyricsDisplay.innerHTML = lyrics.map((line, idx) => {
+        return `<div class="lyrics-line" id="line-${idx}">${line.text}</div>`;
+      }).join('');
+    });
+
+  if (audio) {
+    audio.addEventListener('timeupdate', () => {
+      if (lyrics.length === 0) return;
+
+      let newLine = lyrics.findIndex((line, idx) =>
+        idx === lyrics.length - 1 || (audio.currentTime < lyrics[idx + 1].time)
+      );
+
+      if (newLine !== currentLine && newLine !== -1) {
+        if (currentLine >= 0) {
+          document.getElementById(`line-${currentLine}`)?.classList.remove('highlight');
+        }
+        document.getElementById(`line-${newLine}`)?.classList.add('highlight');
+        currentLine = newLine;
+
+        // Scroll into view
+        document.getElementById(`line-${newLine}`)?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    });
+  }
+});
+</script>
 
 {% endblock %}
