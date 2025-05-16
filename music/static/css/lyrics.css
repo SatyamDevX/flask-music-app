@@ -1,6 +1,6 @@
 .lyrics-box {
-  height: 300px;
-  width: 300px; /* You can adjust this if needed */
+  height: 200px;
+  width: 400px; /* You can adjust this if needed */
   overflow-y: auto;
   overflow-x: hidden; /* Prevent horizontal scrolling */
   padding: 15px;

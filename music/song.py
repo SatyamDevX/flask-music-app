@@ -26,6 +26,8 @@ def song_upload():
       artist = request.form['artist']
       file = request.files['file']
       filename = file.filename
+      lrcfile = request.files['lrcfile']
+      original_lrcfilename = lrcfile.filename
 
       #Enuser upload folder extist
       # os.makedirs(current_app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -34,6 +36,10 @@ def song_upload():
       file.save(save_path)
       print(f"Saving to: {save_path}")
 
+      lrcfilename = filename[:-4] + ".lrc"
+      lrc_save_path = os.path.join(current_app.config['LRC_UPLOAD_FOLDER'], lrcfilename)
+      lrcfile.save(lrc_save_path)
+      print(lrc_save_path)
       
       # Save song info in DB
       song = Song(

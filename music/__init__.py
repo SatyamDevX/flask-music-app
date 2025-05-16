@@ -20,6 +20,8 @@ def create_app():
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
     print("UPLOAD TO:", app.config['UPLOAD_FOLDER'])
 
+    app.config['LRC_UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'lyrics')
+
 
     # Ensure instance folder exists
     try:
