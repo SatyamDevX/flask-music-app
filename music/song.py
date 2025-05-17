@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, current_app, redirect
+from flask import Blueprint, render_template, request, current_app, redirect, url_for
 
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -8,7 +8,7 @@ from flask_security import current_user
 import os
 
 
-from music.models import db, Song
+from music.models import db, Song, Playlist, PlaylistSong
 
 
 song_bp = Blueprint('song', __name__, url_prefix='/song')
@@ -74,3 +74,46 @@ def play_song(song_id):
    song=Song.query.get(song_id)
    print(song)
    return render_template("song_play.html",s=song)
+
+
+@song_bp.route('/add_song_to_playlist/<int:song_id>', methods=['GET'])
+# @login_required
+def show_add_to_playlist_form(song_id):
+
+   playlists = Playlist.query.filter_by(user_id=2).all()
+   return render_template('add_song_playlist.html', playlists=playlists, song_id=song_id)
+
+
+@song_bp.route('/add_song_to_playlist', methods=['POST'])
+# @login_required
+def add_song_to_playlist():
+    song_id = request.form.get('song_id')
+    playlist_id = request.form.get('playlist_id')
+    new_name = request.form.get('new_playlist_name')
+
+    song = Song.query.get(song_id)
+    if not song:
+        return "Song not found", 404
+
+    # Create new playlist if needed
+    if not playlist_id and new_name:
+        new_playlist = Playlist(name=new_name, user_id=2)
+        db.session.add(new_playlist)
+        db.session.commit()
+        playlist_id = new_playlist.id
+
+    if not playlist_id:
+        return "No playlist selected or created", 400
+
+    # Check for duplicate
+    exists = PlaylistSong.query.filter_by(playlist_id=playlist_id, song_id=song_id).first()
+    if exists:
+        return "Song already in playlist", 409
+
+    # Add song to playlist
+    new_link = PlaylistSong(playlist_id=playlist_id, song_id=song_id)
+    db.session.add(new_link)
+    db.session.commit()
+
+    return redirect(url_for('song.show_add_to_playlist_form', song_id=song_id))
+
