@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, current_app, redirect, ur
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from flask_security import current_user
+from flask_security import current_user, login_required
 
 import os
 
@@ -20,6 +20,7 @@ def song_all():
 
 
 @song_bp.route('/upload', methods=('GET','POST'))
+@login_required
 def song_upload():
    if request.method == 'POST':
       title = request.form['title']
@@ -46,8 +47,8 @@ def song_upload():
             title=title,
             artist=artist,
             file_path=filename,  # Only filename; path handled by Flask
-            # creator_id=current_user.id  # assumes user is logged in
-            creator_id=2
+            creator_id=current_user.id  # assumes user is logged in
+            # creator_id=2
       )
       db.session.add(song)
       db.session.commit()
@@ -58,6 +59,7 @@ def song_upload():
 
 
 @song_bp.route('/<int:song_id>/delete', methods=["GET","POST"])
+@login_required
 def delete_song(song_id):
 
    song=Song.query.get(song_id)
@@ -77,15 +79,15 @@ def play_song(song_id):
 
 
 @song_bp.route('/add_song_to_playlist/<int:song_id>', methods=['GET'])
-# @login_required
+@login_required
 def show_add_to_playlist_form(song_id):
 
-   playlists = Playlist.query.filter_by(user_id=2).all()
+   playlists = Playlist.query.filter_by(user_id=current_user.id).all()
    return render_template('add_song_playlist.html', playlists=playlists, song_id=song_id)
 
 
 @song_bp.route('/add_song_to_playlist', methods=['POST'])
-# @login_required
+@login_required
 def add_song_to_playlist():
     song_id = request.form.get('song_id')
     playlist_id = request.form.get('playlist_id')
@@ -97,7 +99,7 @@ def add_song_to_playlist():
 
     # Create new playlist if needed
     if not playlist_id and new_name:
-        new_playlist = Playlist(name=new_name, user_id=2)
+        new_playlist = Playlist(name=new_name, user_id=current_user.id)
         db.session.add(new_playlist)
         db.session.commit()
         playlist_id = new_playlist.id

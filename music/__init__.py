@@ -14,7 +14,8 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(app.instance_path, 'music.db'))
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(16))
-    app.config['SECURITY_PASSWORD_SALT'] = os.environ.get('SECURITY_PASSWORD_SALT', secrets.token_hex(16))
+    app.config['SECURITY_PASSWORD_HASH'] = 'argon2'  # for password hashing
+    app.config['SECURITY_PASSWORD_SALT'] = 'dev-salt-1234'  # fix the issue of login after run app again because security salt changes every time I run that why password does not mach error occur.
     app.config['SECURITY_REGISTERABLE'] = True
     app.config['SECURITY_SEND_REGISTER_EMAIL'] = False  # Disable email for now
     app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static', 'uploads')
