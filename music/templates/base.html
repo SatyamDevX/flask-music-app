@@ -13,7 +13,13 @@
       <div class="container-fluid d-flex justify-content-between align-items-center">
         <a class="navbar-brand" href="/">
           <img src="{{ url_for('static', filename='favicon.ico') }}" alt="" width="30" height="24">
-          <span class="navbar-brand mb-0 h1">Music</span>
+          <span class="navbar-brand mb-0 h1">
+            {% if current_user.is_authenticated %}
+            Welcome {{ current_user.email }}
+            {% else %}
+            Login required
+            {% endif %}
+          </span>
         </a>
 
         <form action="/search" method="POST" class="d-flex" role="search">
@@ -24,7 +30,11 @@
         <ul class="nav nav-underline">
           <li class="nav-item"><a class="nav-link" href="/creatorregister">Creator Account</a></li>
           <li class="nav-item"><a class="nav-link" href="/userprofile">Profile</a></li>
+          {% if current_user.is_authenticated %}
           <li class="nav-item"><a class="nav-link" href="{{ url_for('security.logout') }}">Logout</a></li>
+          {% else %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('security.login') }}">Login</a></li>
+          {% endif %}
         </ul>
       </div>
 
