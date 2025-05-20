@@ -117,5 +117,29 @@ def add_song_to_playlist():
     db.session.add(new_link)
     db.session.commit()
 
-    return redirect(url_for('song.show_add_to_playlist_form', song_id=song_id))
+    return redirect(url_for('user.userdashboard'))
 
+
+@song_bp.route('/remove_song_from_playlist', methods=['POST'])
+@login_required
+def remove_song_from_playlist():
+    song_id = request.form.get('song_id')
+    playlist_id = request.form.get('playlist_id')
+
+    if not song_id or not playlist_id:
+        return "Missing song or playlist ID", 400
+
+    # Ensure the playlist belongs to the current user
+    playlist = Playlist.query.filter_by(id=playlist_id, user_id=current_user.id).first()
+    if not playlist:
+        return "Playlist not found or access denied", 403
+
+    # Find the link
+    link = PlaylistSong.query.filter_by(playlist_id=playlist_id, song_id=song_id).first()
+    if not link:
+        return "Song not in playlist", 404
+
+    db.session.delete(link)
+    db.session.commit()
+
+    return redirect(request.referrer)
