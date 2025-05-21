@@ -69,4 +69,7 @@ def create_app():
     from . import user
     app.register_blueprint(user.user_bp)
 
+    from . import album
+    app.register_blueprint(album.album_bp)
+
     return app
