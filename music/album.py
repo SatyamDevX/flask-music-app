@@ -41,3 +41,48 @@ def view_albums():
    #    'songs': [{'id': s.id, 'title': s.title} for s in album.songs]
    #    })
    return render_template("admin_dashboard.html", albums=albums)
+
+@album_bp.route('/add_song_to_album/page', methods=['GET','POST'])
+@login_required
+def add_song_to_album_page():
+  albumid=request.args.get("album_id")
+  albumtitle=request.args.get("album_title")
+#   print(albumid,albumtitle)
+  songs=Song.query.all()
+  return render_template('all_song.html', songs=songs, albumid=albumid, albumtitle=albumtitle)
+
+@album_bp.route('/add_song_to_album', methods=['GET','POST'])
+@login_required
+def add_song_to_album():
+   album_id=request.args.get("album_id")
+   song_id=request.args.get("song_id")
+   print(album_id,song_id)
+
+
+   song = Song.query.get(song_id)
+   if not song:
+      return "Song not found", 404
+
+   if not album_id:
+      return "No album selected or created", 400
+
+   album = Album.query.get(album_id)
+   if album.creator_id != song.creator_id:
+      return "Only the creator can assign a song to this album", 403
+
+   song.album_id = album_id
+   db.session.commit()
+
+   return "Song added to album", 200
+
+@album_bp.route('/songs')
+@login_required
+def album_songs():
+   album_id=request.args.get('album_id')
+   album = Album.query.get_or_404(album_id)
+   songs = album.songs  # This uses the relationship in your model
+   return render_template('album_song.html', album=album, songs=songs)
+  
+
+
+
