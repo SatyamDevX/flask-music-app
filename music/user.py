@@ -16,7 +16,7 @@ user_bp = Blueprint('user', __name__, url_prefix='/user')
 
 @user_bp.route('/dashboard')
 @login_required
-def userdashboard():
+def user_dashboard():
    songs = Song.query.all()
     # Load playlists for user ID 2, including songs inside them
    playlists_user_2 = Playlist.query.options(joinedload(Playlist.songs).joinedload(PlaylistSong.song))\

@@ -48,10 +48,10 @@ def create_app():
             user_datastore.create_role(name="user", description="Regular user role")
 
         # Create test user if doesn't exist
-        if not user_datastore.find_user(email="admin@example.com"):
+        if not user_datastore.find_user(email="admin@gmail.com"):
             admin_role = user_datastore.find_role("admin")
             user = user_datastore.create_user(
-                email="admin@example.com",
+                email="admin@gmail.com",
                 password="password"  # hashed automatically by Flask-Security
             )
             user_datastore.add_role_to_user(user, admin_role)
@@ -71,5 +71,8 @@ def create_app():
 
     from . import album
     app.register_blueprint(album.album_bp)
+
+    from . import admin
+    app.register_blueprint(admin.admin_bp)
 
     return app

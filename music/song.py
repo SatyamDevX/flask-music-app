@@ -117,7 +117,7 @@ def add_song_to_playlist():
     db.session.add(new_link)
     db.session.commit()
 
-    return redirect(url_for('user.userdashboard'))
+    return redirect(url_for('user.user_dashboard'))
 
 
 @song_bp.route('/remove_song_from_playlist', methods=['POST'])

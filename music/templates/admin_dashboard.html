@@ -7,16 +7,33 @@
 {% block content %}
 
 
-<div class="container mt-5"> 
-   <h2 class="mb-4">Create a New Album</h2> 
-   <form id="albumForm" action="/album/create" method="POST" enctype="multipart/form-data">
-      <div class="mb-3"> 
-         <label for="title" class="form-label">Album Title</label> 
-         <input type="text" class="form-control" id="title" placeholder="Enter album title"  name="title" required> 
-      </div> 
-      <button type="submit" class="btn btn-primary">Create Album</button>
-   </form> 
-</div> 
+<table style="margin-left: 10px;margin-top: 10px; border-collapse: collapse;">
+    <tbody> 
+    <th>
+        <td style="text-align: center;" ><h2 class="mb-4">All Songs</h2> </td>
+    </th> 
+  {% for song in songs %}
+
+    <tr>
+      <td>
+      <strong>{{ song.title }}</strong> by {{ song.artist }}
+     </td>
+     <td>
+      <audio controls>
+        <source src="{{ url_for('static', filename='uploads/' ~ song.file_path) }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+      </td>
+      <td>
+        <a href="{{url_for('song.play_song', song_id = song.id)}}" class="btn btn-primary" style="margin-left: 4px;">play song</a>
+      </td>
+      <td>
+        <a href="{{url_for('song.delete_song', song_id = song.id)}}" class="btn btn-danger" style="margin-right: 4px;width: fit-content;">Delete</a>
+      </td>
+    </tr>
+  {% endfor %}
+    </tbody>
+</table>  
 
 <div class="container mt-5"> 
    <h2 class="mb-4">All Albums</h2> 
@@ -32,6 +49,22 @@
          </div> 
       </div> {% endfor %} 
    </div> 
+</div> 
+
+<div class="container mt-5"> 
+   <h2 class="mb-4">Create a New Album</h2> 
+   <form id="albumForm" action="/album/create" method="POST" enctype="multipart/form-data">
+      <div class="mb-3"> 
+         <label for="title" class="form-label">Album Title</label> 
+         <input type="text" class="form-control" id="title" placeholder="Enter album title"  name="title" required> 
+      </div> 
+      <button type="submit" class="btn btn-primary">Create Album</button>
+   </form> 
+</div>
+
+<div class="container mt-5"> 
+   <h2 class="mb-4">Upload A New Song</h2> 
+   <a href="{{url_for('song.song_upload')}}" class="btn btn-success" style="margin-right: 4px;width: fit-content;">Upload</a>
 </div> 
 
 {% endblock %}

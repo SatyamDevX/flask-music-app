@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, current_app, redirect, ur
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from flask_security import current_user, login_required
+from flask_security import current_user, login_required, roles_required
 
 import os
 
@@ -15,6 +15,7 @@ album_bp = Blueprint('album', __name__, url_prefix='/album')
 
 @album_bp.route('/create', methods=['POST'])
 @login_required
+@roles_required('admin')
 def create_album():
    title = request.form['title']
    if not title:
@@ -29,21 +30,10 @@ def create_album():
 
 
 
-@album_bp.route('/', methods=['GET'])
-def view_albums():
-   albums = Album.query.all()
-   # album_list = []
-   # for album in albums:
-   #    album_list.append({
-   #    'id': album.id,
-   #    'title': album.title,
-   #    'creator': album.creator.username if album.creator else None,
-   #    'songs': [{'id': s.id, 'title': s.title} for s in album.songs]
-   #    })
-   return render_template("admin_dashboard.html", albums=albums)
 
 @album_bp.route('/add_song_to_album/page', methods=['GET','POST'])
 @login_required
+@roles_required('admin')
 def add_song_to_album_page():
   albumid=request.args.get("album_id")
   albumtitle=request.args.get("album_title")
@@ -53,6 +43,7 @@ def add_song_to_album_page():
 
 @album_bp.route('/add_song_to_album', methods=['GET','POST'])
 @login_required
+@roles_required('admin')
 def add_song_to_album():
    album_id=request.args.get("album_id")
    song_id=request.args.get("song_id")
@@ -77,6 +68,7 @@ def add_song_to_album():
 
 @album_bp.route('/songs')
 @login_required
+@roles_required('admin')
 def album_songs():
    album_id=request.args.get('album_id')
    album = Album.query.get_or_404(album_id)
