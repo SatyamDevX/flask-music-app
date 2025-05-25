@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_migrate import Migrate
@@ -60,7 +60,7 @@ def create_app():
     # Test route
     @app.route("/")
     def hello():
-        return render_template('base.html')
+        return render_template('home.html')
     
     #registring song blueprint
     from . import song
