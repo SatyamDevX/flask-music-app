@@ -13,7 +13,7 @@
   <h1 class="display-4 fw-bold">🎵 Welcome to Your Soundtrack</h1>
   {% endif %}
   <p class="lead">Stream music, create playlists, and discover new beats.</p>
-  <a href="/explore" class="btn btn-primary btn-lg mt-3">Start Listening</a>
+  <a href="/song/all_song_list" class="btn btn-primary btn-lg mt-3">Start Listening</a>
 </div>
 
 <!-- Featured Sections -->
@@ -33,7 +33,7 @@
         <div class="card-body">
           <h5 class="card-title">🎧 Your Playlists</h5>
           <p class="card-text">Manage and enjoy your personal playlists.</p>
-          <a href="/playlists" class="btn btn-outline-primary">View</a>
+          <a href="/user/dashboard" class="btn btn-outline-primary">View</a>
         </div>
       </div>
     </div>
@@ -42,7 +42,11 @@
         <div class="card-body">
           <h5 class="card-title">🎤 Creator Mode</h5>
           <p class="card-text">Upload your own music and manage tracks.</p>
-          <a href="/creatorregister" class="btn btn-outline-primary">Upload</a>
+          {% if current_user.is_authenticated and current_user.is_creator %}
+          <a href="/song/upload" class="btn btn-outline-primary">Upload</a>
+          {% else %}
+          <a href="/creatorregister" class="btn btn-outline-primary">Registor</a>
+          {% endif %}
         </div>
       </div>
     </div>

@@ -18,6 +18,11 @@ def song_all():
    songs = Song.query.all()
    return render_template('song_list.html', songs=songs)
 
+@song_bp.route('/all_song_list')
+def all_song_list():
+   songs = Song.query.all()
+   return render_template('all_song_list.html', songs=songs)
+
 
 @song_bp.route('/upload', methods=('GET','POST'))
 @login_required

@@ -4,29 +4,24 @@
 
 {% block content %}
 
-<table style="margin-left: 10px;margin-top: 10px; border-collapse: collapse;">
-    <tbody> 
-    <th>
-        <td style="background-color: aqua; text-align: center;" ><strong>ALL songs</strong></td>
-    </th> 
-  {% for song in songs %}
-
-    <tr>
-      <td>
-      <strong>{{ song.title }}</strong> by {{ song.artist }}
-     </td>
-     <td>
-      <audio controls>
-        <source src="{{ url_for('static', filename='uploads/' ~ song.file_path) }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-      </td>
-      <td>
-        <a href="{{url_for('song.delete_song', song_id = song.id)}}" class="btn btn-primary" style="margin-right: 4px;width: fit-content;">Delete</a>
-      </td>
-    </tr>
-  {% endfor %}
-    </tbody>
-</table>  
+<div class="container mt-5">
+  <div class="row text-center">
+    {% for song in songs %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ song.title }}</h5>
+          <p class="card-text">by {{ song.artist }}</p>
+          <audio controls>
+            <source src="{{ url_for('static', filename='uploads/' ~ song.file_path) }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+          <!-- <a href="{{ url_for('song.song_all') }}" class="btn btn-outline-primary">Explore</a>         -->
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
  {% endblock %}
