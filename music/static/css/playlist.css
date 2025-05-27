@@ -1,0 +1,61 @@
+/* Custom card hover effect */
+.card:hover {
+    transform: scale(1.10);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Rounded corners for card headers (in case rounded-top-4 doesn't apply) */
+.card-header {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+/* Make buttons consistent in spacing */
+.btn-sm {
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Add some margin between playlists visually */
+.card {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Playlist title hover effect */
+.card-title {
+    font-weight: 600;
+}
+
+.card-title:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Better spacing for the main heading */
+h2.ms-2.mt-4 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #444;
+}
+
+/* Better text readability inside cards */
+.list-group-item h6 {
+    font-size: 1rem;
+}
+
+.list-group-item small {
+    font-size: 0.85rem;
+}
+
+/* Responsive fix for small devices */
+@media (max-width: 576px) {
+    .d-flex.flex-column.align-items-end.gap-2 {
+        flex-direction: row !important;
+        justify-content: end;
+        margin-top: 0.5rem;
+    }
+}

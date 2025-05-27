@@ -14,7 +14,7 @@ from sqlalchemy.orm import joinedload
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 
-@user_bp.route('/dashboard')
+@user_bp.route('/playlists')
 @login_required
 def user_dashboard():
    songs = Song.query.all()
@@ -22,6 +22,6 @@ def user_dashboard():
    playlists_user_2 = Playlist.query.options(joinedload(Playlist.songs).joinedload(PlaylistSong.song))\
                                     .filter_by(user_id=current_user.id).all()
 
-   return render_template('user_dashboard.html', songs=songs, playlists_user_2=playlists_user_2)
+   return render_template('user_playlists.html', songs=songs, playlists_user_2=playlists_user_2)
 
 

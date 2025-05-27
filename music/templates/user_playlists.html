@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/playlist.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}
+
+{% block title %}User Dashboard{% endblock %}
+
+
+{% block content %}
+<hr>
+<h2 class="ms-2 mt-4">🎵 Your Playlists</h2>
+
+<div class="container">
+    {% if playlists_user_2 %}
+        <div class="row">
+            {% for playlist in playlists_user_2 %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm border-0 rounded-4 h-100 bg-light">
+                        <div class="card-header bg-gradient  rounded-top-4" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
+                            <h5 class="card-title mb-1">
+                                <i class="bi bi-music-note-list me-1"></i>{{ playlist.name }}
+                            </h5>
+                            <small>ID: {{ playlist.id }}</small>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% if playlist.songs %}
+                                {% for playlist_song in playlist.songs %}
+                                    <li class="list-group-item py-3 px-4">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold"> {{ loop.index }}. {{ playlist_song.song.title }}</h6>
+                                                <small class="text-muted">{{ playlist_song.song.artist }}</small>
+                                            </div>
+                                            <div class="d-flex flex-column align-items-end gap-2">
+                                                <a href="{{ url_for('song.play_song', song_id=playlist_song.song.id) }}"
+                                                   class="btn btn-sm btn-outline-primary px-3">
+                                                    <i class="bi bi-play-fill"></i> Play
+                                                </a>
+                                                <form method="POST"
+                                                      action="{{ url_for('song.remove_song_from_playlist') }}"
+                                                      class="d-inline mb-0">
+                                                    <input type="hidden" name="playlist_id" value="{{ playlist.id }}">
+                                                    <input type="hidden" name="song_id" value="{{ playlist_song.song.id }}">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger px-3">
+                                                        <i class="bi bi-trash3"></i> Remove
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li class="list-group-item text-muted text-center py-3">
+                                    <em>No songs in this playlist.</em>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4">
+            <strong>No playlists found.</strong> Start by creating a playlist!
+        </div>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}
