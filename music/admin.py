@@ -1,14 +1,14 @@
-from flask import Blueprint, render_template, request, current_app, redirect
+from flask import Blueprint, render_template, request, current_app, redirect, flash, url_for
 
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from flask_security import current_user, login_required
+from flask_security import current_user, login_required, roles_required
 
 import os
 
 
-from music.models import db, Song, PlaylistSong, Playlist, Album
+from music.models import db, Song, PlaylistSong, Playlist, Album, User, Role
 from sqlalchemy.orm import joinedload
 
 admin_bp = Blueprint('admin', __name__, url_prefix="/admin")
@@ -20,3 +20,29 @@ def admind_ashboard():
    albums = Album.query.all()
 
    return render_template("admin_dashboard.html", albums=albums, songs=songs)
+
+@admin_bp.route('/approve_creators')
+@roles_required('admin')  # Flask-Security decorator
+def approve_creators():
+    pending_users = User.query.filter_by(creator_requested=True, is_creator=False).all()
+    return render_template('approve_creators.html', users=pending_users)
+
+@admin_bp.route('/approve_creator/<int:user_id>', methods=['POST'])
+@roles_required('admin')
+def approve_creator_action(user_id):
+    user = User.query.get_or_404(user_id)
+    creator_role = Role.query.filter_by(name='creator').first()
+
+    if not creator_role:
+        creator_role = Role(name='creator', description='Creator role')
+        db.session.add(creator_role)
+        db.session.commit()
+
+    user.roles.append(creator_role)
+    user.is_creator = True
+    user.creator_requested = False
+    db.session.commit()
+
+    flash(f"{user.username} has been approved as a creator.", 'success')
+    return redirect(url_for('admin.approve_creators'))
+

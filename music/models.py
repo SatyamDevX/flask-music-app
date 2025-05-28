@@ -26,6 +26,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean, default=True)  # Default is active (True)
     password = db.Column(db.String(256), nullable=False)
     is_creator = db.Column(db.Boolean, default=False)
+    creator_requested = db.Column(db.Boolean, default=False)  # NEW FIELD
     is_admin = db.Column(db.Boolean, default=False)
 
     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))

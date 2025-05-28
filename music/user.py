@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, current_app, redirect
+from flask import Blueprint, render_template, request, current_app, redirect, flash, url_for
 
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -8,7 +8,7 @@ from flask_security import current_user, login_required
 import os
 
 
-from music.models import db, Song, PlaylistSong, Playlist
+from music.models import db, Song, PlaylistSong, Playlist, Role
 from sqlalchemy.orm import joinedload
 
 
@@ -23,5 +23,20 @@ def user_dashboard():
                                     .filter_by(user_id=current_user.id).all()
 
    return render_template('user_playlists.html', songs=songs, playlists_user_2=playlists_user_2)
+
+@user_bp.route('/creator_register')
+@login_required
+def creator_registration():
+    if current_user.is_creator:
+        flash('You are already a creator.', 'info')
+    elif current_user.creator_requested:
+        flash('You have already requested creator access. Please wait for admin approval.', 'info')
+    else:
+        current_user.creator_requested = True
+        db.session.commit()
+        flash('Your request to become a creator has been submitted for admin approval.', 'success')
+
+    return redirect(request.referrer)
+
 
 

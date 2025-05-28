@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+
+
+<h2>Pending Creator Requests</h2>
+
+{% for user in users %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <strong>{{ user.username }}</strong> ({{ user.email }})
+      <form action="{{ url_for('admin.approve_creator_action', user_id=user.id) }}" method="post" style="display:inline;">
+        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+      </form>
+    </div>
+  </div>
+{% else %}
+  <p>No pending requests.</p>
+{% endfor %}
+
+{% endblock %}
