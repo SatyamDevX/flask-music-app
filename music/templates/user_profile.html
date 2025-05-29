@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}{{ current_user.id }} Profile{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+         <div class="card shadow-sm border border-info border-2 rounded-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="card-title mb-1">
+                  <i class="bi bi-person-circle me-2"></i>{{ user.username }}
+                </h4>
+                <h6 class="card-subtitle text-muted">
+                  <i class="bi bi-envelope me-2"></i>{{ user.email }}
+                </h6>
+              </div>
+              <div>
+                <span class="badge bg-{{ 'success' if user.active else 'secondary' }}">
+                  {{ 'Active' if user.active else 'Inactive' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <strong><i class="bi bi-shield-lock me-2"></i>Role:</strong>
+              {% if user.is_admin %}
+                <span class="badge bg-danger ms-2">Admin</span>
+              {% elif user.is_creator %}
+                <span class="badge bg-primary ms-2">Creator</span>
+              {% elif user.creator_requested %}
+                <span class="badge bg-warning text-dark ms-2">Creator Request Pending</span>
+              {% else %}
+                <span class="badge bg-secondary ms-2">Listener</span>
+              {% endif %}
+            </div>
+
+            <hr>
+
+            <div class="row text-center">
+              <div class="col">
+                <i class="bi bi-music-note-beamed fs-4 text-primary"></i>
+                <h6 class="mb-0 mt-1">{{ user.songs_uploaded|length }}</h6>
+                <small class="text-muted">Songs</small>
+              </div>
+              <div class="col">
+                <i class="bi bi-vinyl fs-4 text-success"></i>
+                <h6 class="mb-0 mt-1">{{ user.albums_created|length }}</h6>
+                <small class="text-muted">Albums</small>
+              </div>
+              <div class="col">
+                <i class="bi bi-collection-play fs-4 text-info"></i>
+                <h6 class="mb-0 mt-1">{{ user.playlists|length }}</h6>
+                <small class="text-muted">Playlists</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

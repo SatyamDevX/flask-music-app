@@ -16,7 +16,7 @@
           <img src="{{ url_for('static', filename='favicon.ico') }}" alt="" width="30" height="24">
           <span class="navbar-brand mb-0 h1">
             {% if current_user.is_authenticated %}
-            Welcome {{ current_user.email }}
+            Welcome {{ current_user.username }}
             {% else %}
             Login required
             {% endif %}
@@ -31,7 +31,7 @@
         <ul class="nav nav-underline">
           {% if current_user.is_authenticated %}
           <li class="nav-item"><a class="nav-link" href="/user/playlists">Your Playlists</a></li>
-          <li class="nav-item"><a class="nav-link" href="/userprofile">Profile</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('user.user_profile', user_id=current_user.id )}}">Profile</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('security.logout') }}">Logout</a></li>
           {% else %}
           <li class="nav-item"><a class="nav-link" href="{{ url_for('security.login') }}">Login</a></li>
