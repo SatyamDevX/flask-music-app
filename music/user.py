@@ -8,7 +8,7 @@ from flask_security import current_user, login_required
 import os
 
 
-from music.models import db, Song, PlaylistSong, Playlist, Role
+from music.models import db, Song, PlaylistSong, Playlist, Role, User
 from sqlalchemy.orm import joinedload
 
 
@@ -37,6 +37,15 @@ def creator_registration():
         flash('Your request to become a creator has been submitted for admin approval.', 'success')
 
     return redirect(request.referrer)
+
+@user_bp.route('/<int:user_id>')
+def user_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    # user = User.query.get(2)
+    # user.username = 'Satyam Srivastava'
+    # db.session.commit()
+    return render_template('user_profile.html', user=user)
+
 
 
 
