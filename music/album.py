@@ -57,9 +57,9 @@ def add_song_to_album():
    if not album_id:
       return "No album selected or created", 400
 
-   album = Album.query.get(album_id)
-   if album.creator_id != song.creator_id:
-      return "Only the creator can assign a song to this album", 403
+   # album = Album.query.get(album_id)
+   # if album.creator_id != song.creator_id:
+   #    return "Only the creator can assign a song to this album", 403
 
    song.album_id = album_id
    db.session.commit()
