@@ -7,3 +7,5 @@ instance/
 .env
 .DS_Store
 *.db
+*.mp3
+*.lrc

@@ -31,10 +31,11 @@
                 <span class="badge bg-danger ms-2">Admin</span>
               {% elif user.is_creator %}
                 <span class="badge bg-primary ms-2">Creator</span>
-              {% elif user.creator_requested %}
-                <span class="badge bg-warning text-dark ms-2">Creator Request Pending</span>
               {% else %}
                 <span class="badge bg-secondary ms-2">Listener</span>
+              {% endif %}
+              {% if user.creator_requested %}
+              <span class="badge bg-warning text-dark ms-2">Creator Request Pending</span>
               {% endif %}
             </div>
 

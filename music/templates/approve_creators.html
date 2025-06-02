@@ -4,7 +4,8 @@
 
 {% block content %}
 
-
+<br>
+<section>
 <h2>Pending Creator Requests</h2>
 
 {% for user in users %}
@@ -19,5 +20,23 @@
 {% else %}
   <p>No pending requests.</p>
 {% endfor %}
+</section>
+
+<section>
+  <h2>Approved creators</h2>
+
+{% for creator in creators %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <strong>{{ creator.username }}</strong> ({{ creator.email }})
+      <form action="block_creator/{{creator.id}}" method="post" style="display:inline;"> <!--if you don't put /block_creator then it automatically matches else u have to give as /admin/block_creator/id-->
+        <button type="submit" class="btn btn-danger btn-sm">Block</button>
+      </form>
+    </div>
+  </div>
+{% else %}
+  <p>No Creators</p>
+{% endfor %}
+</section>
 
 {% endblock %}
