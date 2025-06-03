@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Albums{% endblock %}
+
+{% block content %}
+<div class="container mt-5"> 
+   <h2 class="mb-4">All Albums</h2> 
+   <div class="row"> {% for album in albums %} 
+      <div class="col-md-4 mb-4"> 
+         <div class="card shadow-sm h-100"> 
+            <div class="card-body"> 
+               <h5 class="card-title">{{ album.title }}</h5> 
+               <p class="card-text text-muted">By: {{ album.creator.id if album.creator else 'Unknown' }}</p> 
+               <a href="{{ url_for('album.album_songs', album_id=album.id) }}" class="btn btn-primary btn-sm">View Songs</a> 
+            </div> 
+         </div> 
+      </div> {% endfor %} 
+   </div> 
+</div> 
+
+ {% endblock %}

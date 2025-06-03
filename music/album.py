@@ -68,12 +68,18 @@ def add_song_to_album():
 
 @album_bp.route('/songs')
 @login_required
-@roles_required('admin')
+# @roles_required('admin')
 def album_songs():
    album_id=request.args.get('album_id')
    album = Album.query.get_or_404(album_id)
    songs = album.songs  # This uses the relationship in your model
    return render_template('album_song.html', album=album, songs=songs)
+
+@album_bp.route('/')
+def albums():
+   albums=Album.query.all()
+   return render_template("album_list.html", albums=albums)
+
   
 
 

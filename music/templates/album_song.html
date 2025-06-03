@@ -21,11 +21,14 @@
         <tr>
             <td>{{ song.title }}</td>
             <td>{{ song.artist }}</td>
-            <td>
+            <!-- <td>
                 <audio controls>
                     <source src="{{ url_for('static', filename='uploads/' ~ song.file_path) }}" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
+            </td> -->
+             <td>
+                <a href="{{url_for('song.play_song', song_id = song.id)}}" class="btn btn-primary" style="text-align: right;">play song</a>
             </td>
         </tr>
         {% endfor %}
