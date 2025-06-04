@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, current_app, redirect, url_for
+from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
 
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -8,7 +8,7 @@ from flask_security import current_user, login_required
 import os
 
 
-from music.models import db, Song, Playlist, PlaylistSong
+from music.models import db, Song, Playlist, PlaylistSong, Rating
 
 
 song_bp = Blueprint('song', __name__, url_prefix='/song')
@@ -20,7 +20,7 @@ def song_all():
 
 @song_bp.route('/all_song_list')
 def all_song_list():
-   songs = Song.query.all()
+   songs = Song.query.options(db.joinedload(Song.ratings)).all()
    return render_template('all_song_list.html', songs=songs)
 
 
@@ -148,3 +148,25 @@ def remove_song_from_playlist():
     db.session.commit()
 
     return redirect(request.referrer)
+
+@song_bp.route('/<int:song_id>', methods=['POST'])
+@login_required
+def rate_song(song_id):
+    song = Song.query.get_or_404(song_id)
+    stars = int(request.form.get('stars', 0))
+
+    if stars < 1 or stars > 5:
+        flash('Rating must be between 1 and 5 stars.', 'danger')
+        return redirect(url_for('main.dashboard'))  # Adjust redirect
+
+    existing_rating = Rating.query.filter_by(user_id=current_user.id, song_id=song.id).first()
+    if existing_rating:
+        existing_rating.stars = stars
+        flash('Rating updated.', 'success')
+    else:
+        new_rating = Rating(stars=stars, user_id=current_user.id, song_id=song.id)
+        db.session.add(new_rating)
+        flash('Song rated.', 'success')
+
+    db.session.commit()
+    return redirect("/")  # Adjust redirect
